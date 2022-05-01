@@ -1,0 +1,39 @@
+.fab, .far {
+    margin: 7px 7px 0 0;
+    font-size: 12pt;
+    font-weight: 400;
+}
+.badge{
+    font-size: 8px;
+}
+.select2-container .select2-selection--single {
+    height: 36px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 34px;
+    right: 4px;
+}
+li.nav-item.dropdown {
+    bottom: 4px;
+}
+.novaTarefa {
+    border: dotted;
+    background: white;
+    color: #00000078;
+    border-color: #a9a9a9cc;
+}
+/* .novaTarefa>div>div>a>i{
+} */
+.card>div>div>a>i{
+    color: #0000004f;
+    margin-top: 75%;
+}
+.card>div>div>a>i:hover{
+    color: #000000;
+}
+.card-tarefa {
+    padding: 0;
+}
+.card-tarefa>h3.card-title {
+    margin: 2px;
+}
