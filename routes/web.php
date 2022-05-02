@@ -20,6 +20,9 @@ Route::middleware(['auth'])->group(function () {
     // tarefas
     Route::get('/tarefas/{projeto?}', [App\Http\Controllers\TarefasController::class, 'index'])->name('tarefas');
     Route::post('/tarefas', [App\Http\Controllers\TarefasController::class, 'store'])->name('tarefas.store');
+    Route::put('/tarefas/{id}', [App\Http\Controllers\TarefasController::class, 'update'])->name('tarefas.update');
+
+    Route::put('/subtarefas/{id}', [App\Http\Controllers\TarefasController::class, 'updateSub'])->name('subtarefas.update');
 
     Route::get('/modals/{modal}', [App\Http\Controllers\ModalsController::class, 'index'])->name('modals');	
 });

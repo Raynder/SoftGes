@@ -44,4 +44,22 @@ class TarefasController extends Controller
 
         return redirect()->route('tarefas', ['projeto' => $request->projeto_id]);
     }
+
+    public function update(Request $request){
+        $tarefa = Tarefa::find($request->id);
+        $tarefa->status = $request->status;
+        if($tarefa->save()){
+            exit(json_encode(['icon' => 'success', 'title' => 'Tarefa atualizada com sucesso!']));
+        }
+        exit(json_encode(['icon' => 'error', 'title' => 'Erro ao atualizar tarefa!']));
+    }
+
+    public function updateSub(Request $request){
+        $subtarefa = Subtarefa::find($request->id);
+        $subtarefa->status = $request->status;
+        if($subtarefa->save()){
+            exit(json_encode(['icon' => 'success', 'title' => 'Subtarefa atualizada com sucesso!']));
+        }
+        exit(json_encode(['icon' => 'error', 'title' => 'Erro ao atualizar subtarefa!']));
+    }
 }

@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="card novaTarefa" onclick="build_form('Nova tarefa')" data-toggle="modal"
+                        <div class="card novaTarefa" onclick="Form.build_form('Nova tarefa')" data-toggle="modal"
                             data-target="#modal-lg">
                             <div class="card-header">
                                 <h5 class="card-title">Nova tarefa</h5>
@@ -47,7 +47,8 @@
 
                         @foreach ($tarefas as $tarefaPai)
                             @if ($tarefaPai->status == '0')
-                                <div class="card card-info card-outline">
+                                <div class="card card-tarefa-move card-info card-outline" id="{{ $tarefaPai->id }}"
+                                    draggable="true">
                                     <div class="card-header">
                                         <h5 class="card-title">{{ $tarefaPai->titulo }}</h5>
                                         <div class="card-tools">
@@ -85,10 +86,11 @@
                         </h3>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body dropzone" id="1">
                         @foreach ($tarefas as $tarefaPai)
                             @if ($tarefaPai->status == '1')
-                                <div class="card card-info card-outline">
+                                <div class="card card-tarefa-move card-info card-outline" id="{{ $tarefaPai->id }}"
+                                    draggable="true">
                                     <div class="card-header">
                                         <h5 class="card-title">{{ $tarefaPai->titulo }}</h5>
                                         <div class="card-tools">
@@ -101,7 +103,7 @@
                                     <div class="card-body">
                                         @foreach ($subtarefas_por_tarefa[$tarefaPai->id] as $subtarefa)
                                             <div class="custom-control custom-checkbox">
-                                                <input class="custom-control-input" disabled type="checkbox"
+                                                <input class="custom-control-input" type="checkbox" {{ $subtarefa->status == 1 ? 'checked' : '' }}
                                                     id="subtarefa{{ $subtarefa->id }}">
                                                 <label for="subtarefa{{ $subtarefa->id }}"
                                                     class="custom-control-label">{{ $subtarefa->tarefa }}</label>
@@ -125,10 +127,11 @@
                         </h3>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body dropzone" id="2">
                         @foreach ($tarefas as $tarefaPai)
                             @if ($tarefaPai->status == '2')
-                                <div class="card card-info card-outline">
+                                <div class="card card-tarefa-move card-info card-outline" id="{{ $tarefaPai->id }}"
+                                    draggable="true">
                                     <div class="card-header">
                                         <h5 class="card-title">{{ $tarefaPai->titulo }}</h5>
                                         <div class="card-tools">
@@ -141,7 +144,7 @@
                                     <div class="card-body">
                                         @foreach ($subtarefas_por_tarefa[$tarefaPai->id] as $subtarefa)
                                             <div class="custom-control custom-checkbox">
-                                                <input class="custom-control-input" disabled type="checkbox"
+                                                <input class="custom-control-input" type="checkbox" {{ $subtarefa->status == 1 ? 'checked' : '' }}
                                                     id="subtarefa{{ $subtarefa->id }}">
                                                 <label for="subtarefa{{ $subtarefa->id }}"
                                                     class="custom-control-label">{{ $subtarefa->tarefa }}</label>
@@ -166,10 +169,11 @@
                         </h3>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body dropzone" id="3">
                         @foreach ($tarefas as $tarefaPai)
                             @if ($tarefaPai->status == '3')
-                                <div class="card card-info card-outline">
+                                <div class="card card-tarefa-move card-info card-outline" id="{{ $tarefaPai->id }}"
+                                    draggable="true">
                                     <div class="card-header">
                                         <h5 class="card-title">{{ $tarefaPai->titulo }}</h5>
                                         <div class="card-tools">
@@ -182,7 +186,7 @@
                                     <div class="card-body">
                                         @foreach ($subtarefas_por_tarefa[$tarefaPai->id] as $subtarefa)
                                             <div class="custom-control custom-checkbox">
-                                                <input class="custom-control-input" disabled type="checkbox"
+                                                <input class="custom-control-input" type="checkbox" {{ $subtarefa->status == 1 ? 'checked' : '' }}
                                                     id="subtarefa{{ $subtarefa->id }}">
                                                 <label for="subtarefa{{ $subtarefa->id }}"
                                                     class="custom-control-label">{{ $subtarefa->tarefa }}</label>
@@ -203,7 +207,31 @@
     </div>
 
     <input type="hidden" id="projeto_id" value="{{ $projeto->id }}">
+    <button type="button" class="btn btn-success swalDefaultSuccess">
+        Launch Success Toast
+    </button>
 @endsection
+
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+
+<script>
+    $(function() {
+        Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+    });
+
+    function alerta(icon, title) {
+        Toast.fire({
+            icon: icon,
+            title: title
+        })
+    }
+</script>
 
 <script>
     function build_form(rota) {
@@ -223,4 +251,134 @@
             }
         })
     }
+
+    dropzoneEnd = '';
+    dropzoneStart = '';
+
+    setTimeout(function() {
+        cards = document.querySelectorAll('.card-tarefa-move');
+        dropzones = document.querySelectorAll('.dropzone');
+
+        // Cards 
+        cards.forEach((card) => {
+            card.addEventListener('dragstart', dragstart);
+            card.addEventListener('dragend', dragEnd);
+            card.addEventListener('drag', drag);
+        });
+
+
+        function dragstart() {
+            //this = card
+            dropzones.forEach((dropzone) => {
+                dropzone.classList.add('highlight');
+            });
+
+            this.classList.add('is-dragging');
+            dropzoneStart = this.parentElement.id;
+        }
+
+        function dragEnd() {
+            //this = card
+            dropzones.forEach((dropzone) => {
+                dropzone.classList.remove('highlight');
+            });
+
+            this.classList.remove('is-dragging');
+
+            // Atualizar status da tarefa
+            if (dropzoneStart != dropzoneEnd.id) {
+                attStatus(this.id, dropzoneEnd.id);
+
+                // remover disabled dos checkboxes
+                this.querySelectorAll('.custom-control-input').forEach((checkbox) => {
+                    checkbox.disabled = false;
+                });
+            }
+
+        }
+
+        function drag() {
+            // console.log('card drag');
+        }
+
+        // dropzones
+        dropzones.forEach((dropzone) => {
+            dropzone.addEventListener('dragover', dragover);
+            dropzone.addEventListener('dragenter', dragenter);
+            dropzone.addEventListener('dragleave', dragleave);
+            dropzone.addEventListener('drop', drop);
+        });
+
+        function dragover() {
+            //this = dropzone
+            this.classList.add('over');
+
+            const cardBeingDragged = document.querySelector('.is-dragging');
+            dropzoneEnd = this;
+
+            this.appendChild(cardBeingDragged);
+
+        }
+
+        function dragenter() {
+            //this = dropzone
+        }
+
+        function dragleave() {
+            //this = dropzone
+            this.classList.remove('over');
+        }
+
+        function drop() {
+            console.log('dropzone drop');
+        }
+
+        function attStatus(id_tarefa, id_dropzone) {
+            $.ajax({
+                url: 'tarefas/' + id_tarefa,
+                type: 'PUT',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    status: id_dropzone
+                },
+                success: function(data) {
+                    data = JSON.parse(data);
+                    alerta(data.icon, data.title);
+                }
+            });
+        }
+
+        // verificar se o checkbox de alguma subtarefa foi marcado
+        $('.custom-control-input').on('change', function() {
+            if (this.checked) {
+                // atualizar status da subtarefa no banco
+                $.ajax({
+                    url: 'subtarefas/' + this.id.replace('subtarefa', ''),
+                    type: 'PUT',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: 1
+                    },
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        alerta(data.icon, data.title);
+                    }
+                });
+            } else {
+                // atualizar status da subtarefa no banco
+                $.ajax({
+                    url: 'subtarefas/' + this.id.replace('subtarefa', ''),
+                    type: 'PUT',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: 0
+                    },
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        alerta(data.icon, data.title);
+                    }
+                });
+            }
+        });
+    }, 2000);
 </script>
