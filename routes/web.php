@@ -27,7 +27,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/modals/{modal}', [App\Http\Controllers\ModalsController::class, 'index'])->name('modals');	
 });
 
-Route::get('/login', [App\Http\Controllers\LoginController::class, 'index'])->name('login');
+Route::get('/login', function () {
+    echo('teste');
+})->name('login');
 Route::post('/login', [App\Http\Controllers\LoginController::class, 'login'])->name('login');
 Route::get('/logout', [App\Http\Controllers\LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [App\Http\Controllers\LoginController::class, 'register'])->name('register');
