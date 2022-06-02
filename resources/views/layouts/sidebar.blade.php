@@ -47,6 +47,16 @@
             </a>
           </li>
           
+          <li class="nav-item">
+            <a href="{{ route('clientes'); }}" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Clientes
+                {{-- <span class="right badge badge-danger">New</span> --}}
+              </p>
+            </a>
+          </li>
+          
           {{-- Multi menu --}}
           <li class="nav-item">
 
@@ -61,14 +71,14 @@
 
             {{-- Submenus --}}
             <ul class="nav nav-treeview">
-
-              
               @php
-                $projetos = App\Models\Projeto::all();
-                
+                $projetos = DB::table('projetos')
+                ->join('membros_projeto', 'projetos.id', '=', 'membros_projeto.projeto_id')
+                ->where('membros_projeto.user_id', auth()->user()->id)->get();
+                                
                 foreach ($projetos as $projeto) {
                   echo '<li class="nav-item">
-                    <a href="'.route('tarefas').'?projeto='. $projeto->id .'" class="nav-link">
+                    <a href="'.route('tarefas').'?projeto='. $projeto->projeto_id .'" class="nav-link">
                       <i class="fas fa-tasks nav-icon"></i>
                       <p>'. $projeto->nome .'</p>
                     </a>

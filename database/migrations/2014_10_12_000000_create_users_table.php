@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use App\Models\User;
+
 class CreateUsersTable extends Migration
 {
     public function up()
@@ -20,6 +22,12 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        $user = new User();
+        $user->name = 'Raynder Cardoso';
+        $user->email = 'raynder4@gmail.com';
+        $user->password = bcrypt('123');
+        $user->save();
     }
 
     public function down()

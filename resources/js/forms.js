@@ -2,7 +2,7 @@ require('./bootstrap');
 
 const Form = {
     build_form: function (rota) {
-        route = rota.toLowerCase();
+        var route = rota.toLowerCase();
         route = route.split(' ')
         route[1] = route[1].charAt(0).toUpperCase() + route[1].slice(1);
         route = route.join('');

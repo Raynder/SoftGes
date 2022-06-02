@@ -25,6 +25,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/subtarefas/{id}', [App\Http\Controllers\TarefasController::class, 'updateSub'])->name('subtarefas.update');
 
     Route::get('/modals/{modal}', [App\Http\Controllers\ModalsController::class, 'index'])->name('modals');	
+
+    Route::get('clientes', [App\Http\Controllers\ClientesController::class, 'index'])->name('clientes');
+    Route::get('clientes/update/{id}', [App\Http\Controllers\ClientesController::class, 'update'])->name('clientes.update');
+    Route::get('clientes/create', [App\Http\Controllers\ClientesController::class, 'create'])->name('clientes.create');
+    Route::post('clientes/create', [App\Http\Controllers\ClientesController::class, 'store'])->name('clientes.store');
+    Route::get('clientes/delete/{id}', [App\Http\Controllers\ClientesController::class, 'destroy'])->name('clientes.destroy');
 });
 
 Route::get('/login', [App\Http\Controllers\LoginController::class, 'index'])->name('login');

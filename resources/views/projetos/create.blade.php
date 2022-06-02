@@ -46,13 +46,31 @@
                             </div>
                             <div class="form-group">
                                 <label>Cliente</label>
-                                <select class="form-control select2" style="width: 100%;">
+                                <select class="form-control select2 select-cliente" style="width: 100%;">
+                                    <option value="" selected="selected"></option>
+                                    @foreach ($clientes as $cliente)
+                                        <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
+                                    @endforeach
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>Responsavel</label>
-                                <select class="form-control select2" style="width: 100%;">
-                                </select>
+                            <label>Membro</label>
+                            <div class="selectButton">
+                                <div class="form-group" style="width: 80%;float: left;">
+                                    <select class="form-control select2 select-membro" style="">
+                                        <option value="" selected="selected"></option>
+                                        @if (count($usuarios) > 0)
+                                            @foreach ($usuarios as $usuario)
+                                                <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+    
+                                <div class="input-group-append" style="width: 20%;">
+                                    <label class=""></label>
+                                    <button id="add-membro" type="button" class="btn btn-primary"
+                                        onclick="Membros.addMembros()">Add</button>
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -60,40 +78,24 @@
                     <!-- /.card -->
                 </div>
 
-                {{-- <div class="col-md-6">
-                <div class="card card-secondary">
-                    <div class="card-header">
-                        <h3 class="card-title">Cliente</h3>
+                <div class="col-sm-6">
+                    <div class="card card-row card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                            </h3>
+                        </div>
 
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                        {{-- Membro --}}
+                        <div class="card-body card-membros">
+                            
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="inputEstimatedBudget">Estimated budget</label>
-                            <input type="number" id="inputEstimatedBudget" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputSpentBudget">Total amount spent</label>
-                            <input type="number" id="inputSpentBudget" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEstimatedDuration">Estimated project duration</label>
-                            <input type="number" id="inputEstimatedDuration" class="form-control">
-                        </div>
-                    </div>
-                    <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
-            </div> --}}
             </div>
             <div class="row">
                 <div class="col-12">
                     <a href="#" class="btn btn-secondary">Cancelar</a>
-                    <input type="submit" value="Criar Projeto" class="btn btn-success float-right">
+                    <input type="button" onclick="Membros.membrosProjetos('{{ route('projetos.create') }}','{{ csrf_token() }}')" value="Criar Projeto" class="btn btn-success float-right">
                 </div>
             </div>
         </form>
